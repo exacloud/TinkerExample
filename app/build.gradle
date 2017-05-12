@@ -16,6 +16,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //使用当前时间作为TINKER_ID，可以让每个生成的包TINKER_ID都唯一
+            manifestPlaceholders = ["TINKER_ID":System.currentTimeMillis()]
+        }
+        debug {
+            manifestPlaceholders = ["TINKER_ID":System.currentTimeMillis()]
         }
     }
 }

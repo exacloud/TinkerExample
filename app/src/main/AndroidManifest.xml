@@ -11,7 +11,11 @@
         android:name=".ExampleApplication"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="TINKER_ID" android:value="tinker_id_b168b34"/>
+        <!--每个版本TINKER_ID需不同，这样针对该版本打出的补丁包才只运行在对应版本上，升级版本后，补丁也会失效-->
+        <meta-data
+            android:name="TINKER_ID"
+            android:value="${TINKER_ID}" />
+
         <service
             android:name=".SampleResultService"
             android:exported="false"/>
