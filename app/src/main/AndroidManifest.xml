@@ -11,8 +11,10 @@
         android:name=".ExampleApplication"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="TINKER_ID" android:value="tinker_id_b168b32"/>
-
+        <meta-data android:name="TINKER_ID" android:value="tinker_id_b168b34"/>
+        <service
+            android:name=".SampleResultService"
+            android:exported="false"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

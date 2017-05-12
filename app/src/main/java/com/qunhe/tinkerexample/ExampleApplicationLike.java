@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import com.tencent.tinker.lib.listener.DefaultPatchListener;
+import com.tencent.tinker.lib.patch.UpgradePatch;
+import com.tencent.tinker.lib.reporter.DefaultLoadReporter;
+import com.tencent.tinker.lib.reporter.DefaultPatchReporter;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.app.DefaultApplicationLike;
 
@@ -23,6 +27,16 @@ public class ExampleApplicationLike extends DefaultApplicationLike {
     @Override
     public void onBaseContextAttached(final Context base) {
         super.onBaseContextAttached(base);
-        TinkerInstaller.install(this);
+        Context context = getApplication();
+        TinkerInstaller.install(this, new DefaultLoadReporter(context),
+                new DefaultPatchReporter(context),
+                new DefaultPatchListener(context), SampleResultService.class, new UpgradePatch());
+        //TinkerInstaller.install(this);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
     }
 }

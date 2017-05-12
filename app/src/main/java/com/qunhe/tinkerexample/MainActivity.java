@@ -6,8 +6,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
+import com.tencent.tinker.lib.tinker.TinkerLoadResult;
+import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -19,8 +23,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void load(View view) {
-        String patchPath = getCacheDir() + "/patch_signed.apk";
+        String patchPath = "/sdcard/patch_signed.apk";
         Log.e("pengtao", "path = " + patchPath);
         TinkerInstaller.onReceiveUpgradePatch(getApplicationContext(), patchPath);
+    }
+
+    public void getPatchVersion(View view) {
+        if (Tinker.isTinkerInstalled()) {
+            TinkerLoadResult tinkerLoadResult =
+                    Tinker.with(getApplicationContext()).getTinkerLoadResultIfPresent();
+            Log.e("pengtao", "currentversion = " + tinkerLoadResult.currentVersion);
+        }
+    }
+
+    public void cleanPatch(View view) {
+        if (Tinker.isTinkerInstalled()) {
+            ShareTinkerInternals.killAllOtherProcess(getApplicationContext());
+            TinkerInstaller.cleanPatch(this);
+        }
+    }
+
+    public void isLoaded(View view) {
+        Toast.makeText(this, "isLoad = " + Tinker.with(this).isTinkerLoaded(), Toast.LENGTH_SHORT).show();
     }
 }
