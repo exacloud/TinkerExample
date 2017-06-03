@@ -50,6 +50,8 @@ public class SampleResultService extends AbstractResultService {
             @Override
             public void run() {
                 if (result.isSuccess) {
+                    SharedPreferencesUtil.setString(TinkerManager.getTinkerApplicationLike().getApplication()
+                            , SharedPreferencesUtil.CURRENT_PATCH_VERSION, "1231");
                     Toast.makeText(getApplicationContext(), "patch success, please restart process", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "patch fail, please check reason", Toast.LENGTH_LONG).show();
