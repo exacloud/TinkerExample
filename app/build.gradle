@@ -1,5 +1,16 @@
 apply plugin: 'com.android.application'
 
+def gitSha() {
+    try {
+        String gitRev = 'git rev-parse --short HEAD'.execute(null, project.rootDir).text.trim()
+        if (gitRev == null) {
+            throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
+        }
+        return gitRev
+    } catch (Exception e) {
+        throw new GradleException("can't get git rev, you should add git to system path or just input test value, such as 'testTinkerId'")
+    }
+}
 
 android {
     compileSdkVersion 25
@@ -17,10 +28,10 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //使用当前时间作为TINKER_ID，可以让每个生成的包TINKER_ID都唯一
-            manifestPlaceholders = ["TINKER_ID":System.currentTimeMillis()]
+            manifestPlaceholders = ["TINKER_ID":gitSha()]
         }
         debug {
-            manifestPlaceholders = ["TINKER_ID":System.currentTimeMillis()]
+            manifestPlaceholders = ["TINKER_ID":gitSha()]
         }
     }
 }
@@ -42,3 +53,4 @@ dependencies {
     compile("com.tencent.tinker:tinker-commons:${TINKER_VERSION}") { changing = true }
 }
 
+apply from: rootProject.file('app/patch.gradle')

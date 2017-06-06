@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
 import com.tencent.tinker.lib.util.TinkerLog;
@@ -54,16 +53,6 @@ public class ExampleApplicationLike extends DefaultApplicationLike {
             @Override
             public void onActivityStopped(final Activity activity) {
                 Log.e("pengtao", "onActivityStopped");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mStartStopPair < 0) {
-                            Log.e("pengtao", "restartProcess");
-                            restartProcess();
-                        }
-                    }
-                }, 100);
-
             }
 
             @Override
