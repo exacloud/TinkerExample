@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String a = null;
         //Log.e("pengtao", "patched" + a.isEmpty());
-        Log.e("pengtao", "no patched");
+        Log.e("pengtao", "patched");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
     }
 

@@ -1,0 +1,49 @@
+def bakPath = file("${buildDir}/bakApk/")
+
+List<String> flavors = new ArrayList<>();
+project.android.productFlavors.each {flavor ->
+    flavors.add(flavor.name)
+}
+boolean hasFlavors = flavors.size() > 0
+def date = new Date().format("MMdd-HH-mm-ss")
+
+/**
+ * bak apk and mapping
+ */
+android.applicationVariants.all { variant ->
+    /**
+     * task type, you want to bak
+     */
+    def taskName = variant.name
+
+    tasks.all {
+        if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
+
+            it.doLast {
+                copy {
+                    def fileNamePrefix = "${project.name}-${variant.baseName}"
+                    def newFileNamePrefix = hasFlavors ? "${fileNamePrefix}" : "${fileNamePrefix}-${date}"
+
+                    def destPath = hasFlavors ? file("${bakPath}/${project.name}-${date}/${variant.flavorName}") : bakPath
+                    from variant.outputs.outputFile
+                    into destPath
+                    rename { String fileName ->
+                        fileName.replace("${fileNamePrefix}.apk", "${newFileNamePrefix}.apk")
+                    }
+
+                    from "${buildDir}/outputs/mapping/${variant.dirName}/mapping.txt"
+                    into destPath
+                    rename { String fileName ->
+                        fileName.replace("mapping.txt", "${newFileNamePrefix}-mapping.txt")
+                    }
+
+                    from "${buildDir}/intermediates/symbols/${variant.dirName}/R.txt"
+                    into destPath
+                    rename { String fileName ->
+                        fileName.replace("R.txt", "${newFileNamePrefix}-R.txt")
+                    }
+                }
+            }
+        }
+    }
+}
